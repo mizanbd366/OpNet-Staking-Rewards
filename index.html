@@ -47,20 +47,23 @@
                 try {
                     const accounts = await provider.requestAccounts();
                     const addr = accounts[0];
-                    document.getElementById('walletBtn').innerText = addr.substring(0,6) + "..." + addr.slice(-4);
-                    document.getElementById('balance').innerText = "100.00 OPN";
-                    alert("OP-Wallet Connected Successfully!");
-                } catch (e) {
-                    alert("Connection rejected.");
-                }
-            } else {
-                alert("OP-Wallet not detected! Please open the extension and UNLOCK it first, then refresh this page.");
-            }
-        }
+        async function connectOpWallet() {
+    // এটি ৩টি ভিন্ন উপায়ে ওয়ালেট খোঁজার চেষ্টা করবে
+    const provider = window.opwallet || window.unisat || (window.ethereum && window.ethereum.isUnisat ? window.ethereum : null);
 
-        function signTx() {
-            alert("Confirm this action in your OP-Wallet extension.");
+    if (provider) {
+        try {
+            const accounts = await provider.requestAccounts();
+            const addr = accounts[0];
+            document.getElementById('walletBtn').innerText = addr.substring(0,6) + "..." + addr.slice(-4);
+            document.getElementById('walletBtn').style.color = "#3fb950";
+            document.getElementById('balance').innerText = "100.00 OPN";
+            alert("Connected to OP-Wallet!");
+        } catch (e) {
+            alert("Connection rejected. Please unlock and try again.");
         }
-    </script>
-</body>
-</html>
+    } else {
+        alert("Still not found! Please ensure OP-WALLET is the ONLY active Bitcoin extension in your browser.");
+    }
+        }
+                    
