@@ -7,7 +7,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; min-height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .header { width: 100%; padding: 20px; display: flex; justify-content: flex-end; position: absolute; top: 0; box-sizing: border-box; }
-        .connect-btn { background-color: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; z-index: 10; }
+        .connect-btn { background-color: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; z-index: 100; }
         .container { background-color: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6); width: 380px; margin-top: 60px; }
         h1 { color: #58a6ff; font-size: 26px; margin: 0; }
         .tagline { font-size: 12px; color: #8b949e; margin-bottom: 25px; }
@@ -39,16 +39,18 @@
             <div class="stat-box"><div class="stat-label">Rewards Earned</div><div id="userRewards" class="stat-value highlight">0.000 OPN</div></div>
         </div>
 
-        <input type="number" placeholder="0.00">
-        <button class="main-btn" onclick="executeStake()">Stake Tokens</button>
-        <button class="withdraw-btn" onclick="executeWithdraw()">Withdraw Everything</button>
+        <input type="number" id="stakeInput" placeholder="0.00">
+        <button class="main-btn" onclick="executeAction('Stake')">Stake Tokens</button>
+        <button class="withdraw-btn" onclick="executeAction('Withdraw')">Withdraw Everything</button>
 
         <div class="footer-note">Contract: 0xOpNet...Staking | Audit: Passed ✅</div>
     </div>
 
     <script>
         async function connectOpOnly() {
-            const provider = window.opwallet || window.unisat; 
+            // Unisat বা OP_Wallet উভয়কেই সাপোর্ট করবে
+            const provider = window.opwallet || window.unisat;
+
             if (provider) {
                 try {
                     const accounts = await provider.requestAccounts();
@@ -57,13 +59,17 @@
                     document.getElementById('walletBtn').style.color = "#3fb950";
                     document.getElementById('userBalance').innerText = "100.00 OPN";
                     alert("Connected to OP-Wallet!");
-                } catch (e) { alert("Connection rejected."); }
+                } catch (e) {
+                    alert("Connection failed. Please check your wallet.");
+                }
             } else {
-                alert("OP-Wallet not detected. Please ensure you are using Kiwi/Mises browser and the extension is unlocked.");
+                alert("OP-Wallet not detected. Click the extension menu and ensure OP-Wallet is active.");
             }
         }
-        function executeStake() { alert("Transaction sent to OP-Wallet!"); }
-        function executeWithdraw() { alert("Withdrawal requested!"); }
+
+        function executeAction(type) {
+            alert(type + " transaction sent to your OP-Wallet for signing!");
+        }
     </script>
 </body>
 </html>
