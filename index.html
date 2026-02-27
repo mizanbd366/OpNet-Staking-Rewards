@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpNet Staking Pro Dashboard</title>
+    <title>OpNet Pro Staking Dashboard</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background-color: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6); width: 400px; }
+        body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; min-height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* উপরের ওয়ালেট বাটন */
+        .header { width: 100%; padding: 20px; display: flex; justify-content: flex-end; position: absolute; top: 0; box-sizing: border-box; }
+        .connect-btn { background-color: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .connect-btn:hover { background-color: #30363d; border-color: #58a6ff; }
+
+        .container { background-color: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6); width: 380px; margin-top: 60px; }
         h1 { color: #58a6ff; font-size: 26px; margin-bottom: 5px; }
         .tagline { font-size: 12px; color: #8b949e; margin-bottom: 25px; }
         
-        /* ফিচার বক্সগুলো */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .stat-box { background: #0d1117; padding: 15px; border-radius: 12px; border: 1px solid #30363d; }
         .stat-label { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 5px; }
@@ -18,15 +23,20 @@
         .highlight { color: #3fb950; }
 
         input { width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; text-align: center; font-size: 16px; }
-        button { background-color: #238636; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; margin-bottom: 10px; }
-        button:hover { background-color: #2ea043; transform: translateY(-2px); }
-        .withdraw-btn { background-color: transparent; border: 1px solid #f85149; color: #f85149; }
+        .main-btn { background-color: #238636; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; margin-bottom: 10px; }
+        .main-btn:hover { background-color: #2ea043; transform: translateY(-2px); }
+        .withdraw-btn { background-color: transparent; border: 1px solid #f85149; color: #f85149; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.3s; }
         .withdraw-btn:hover { background-color: #f85149; color: white; }
         
         .footer-note { font-size: 11px; margin-top: 20px; color: #484f58; border-top: 1px solid #30363d; padding-top: 15px; }
     </style>
 </head>
 <body>
+
+    <div class="header">
+        <button class="connect-btn" onclick="connectOpWallet()">Connect OpWallet</button>
+    </div>
+
     <div class="container">
         <h1>🌐 OpNet Staking</h1>
         <p class="tagline">Secure DeFi Staking Protocol</p>
@@ -42,7 +52,7 @@
             </div>
             <div class="stat-box">
                 <div class="stat-label">Your Balance</div>
-                <div class="stat-value">0.00 OPN</div>
+                <div id="balance" class="stat-value">0.00 OPN</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Rewards Earned</div>
@@ -51,12 +61,31 @@
         </div>
 
         <input type="number" placeholder="0.00">
-        <button onclick="alert('Connecting to OpNet Smart Contract...')">Stake Tokens</button>
-        <button class="withdraw-btn" onclick="alert('Claiming Rewards & Unstaking...')">Withdraw Everything</button>
+        <button class="main-btn" onclick="checkConnection()">Stake Tokens</button>
+        <button class="withdraw-btn" onclick="checkConnection()">Withdraw Everything</button>
 
         <div class="footer-note">
             Contract: 0xOpNet...Staking | Audit: Passed ✅
         </div>
     </div>
+
+    <script>
+        function connectOpWallet() {
+            // OpWallet কানেকশন লজিক (সিমুলেটেড)
+            alert("OpWallet Extension detected! \nRequesting connection to: mizanbd366...");
+            document.querySelector('.connect-btn').innerText = "0x7a2...4f9";
+            document.querySelector('.connect-btn').style.color = "#3fb950";
+            document.getElementById('balance').innerText = "500.00 OPN";
+        }
+
+        function checkConnection() {
+            let btnText = document.querySelector('.connect-btn').innerText;
+            if(btnText === "Connect OpWallet") {
+                alert("Please connect your OpWallet first!");
+            } else {
+                alert("Transaction sent to OpWallet for signing!");
+            }
+        }
+    </script>
 </body>
 </html>
