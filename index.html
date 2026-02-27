@@ -48,7 +48,6 @@
 
     <script> 
 async function connectOpOnly() {
-    // ৫ সেকেন্ড পর্যন্ত অপেক্ষা করবে যদি এক্সটেনশন লোড হতে দেরি করে
     const provider = window.opwallet || window.unisat; 
 
     if (provider) {
@@ -56,7 +55,6 @@ async function connectOpOnly() {
             const accounts = await provider.requestAccounts();
             const account = accounts[0];
             
-            // বাটন এবং ব্যালেন্স আপডেট
             document.getElementById('walletBtn').innerText = account.substring(0,6) + "..." + account.slice(-4);
             document.getElementById('walletBtn').style.color = "#3fb950";
             document.getElementById('userBalance').innerText = "100.00 OPN";
@@ -66,11 +64,14 @@ async function connectOpOnly() {
             alert("Connection rejected by user."); 
         }
     } else {
-        alert("OP-Wallet not detected. Please ensure you are using Kiwi/Mises browser and the extension is unlocked.");
+        alert("OP-Wallet not detected. Please use Kiwi/Mises Browser and ensure the extension is unlocked.");
     }
-    }
-        
+}
 
+function executeStake() { alert("Stake Transaction sent!"); }
+function executeWithdraw() { alert("Withdrawal requested!"); }
+</script>
+    
         function executeStake() { alert("Transaction sent to OP-Wallet!"); }
         function executeWithdraw() { alert("Withdrawing rewards to OP-Wallet..."); }
     </script>
