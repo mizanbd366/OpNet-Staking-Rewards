@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpNet Staking Rewards Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0d1117; color: #c9d1d9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: #161b22; padding: 30px; border-radius: 15px; border: 1px solid #30363d; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 350px; }
+        h1 { color: #58a6ff; font-size: 24px; margin-bottom: 20px; }
+        .stats { background: #0d1117; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px dashed #30363d; }
+        input { width: 80%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #30363d; background: #0d1117; color: white; }
+        button { background-color: #238636; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        button:hover { background-color: #2ea043; }
+        .secondary-btn { background-color: #21262d; border: 1px solid #30363d; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 OpNet Staking</h1>
+        <div class="stats">
+            <p>Your Balance: <strong>0.00 OPN</strong></p>
+            <p>Rewards Earned: <span style="color: #3fb950;">0.00 OPN</span></p>
+        </div>
+        <input type="number" placeholder="Amount to Stake">
+        <button onclick="alert('Please connect MetaMask to stake!')">Stake Tokens</button>
+        <button class="secondary-btn" onclick="alert('Rewards will appear after staking.')">Withdraw Rewards</button>
+        <p style="font-size: 12px; margin-top: 20px; color: #8b949e;">Powered by OpNet Network</p>
+    </div>
+</body>
+</html>
+  
