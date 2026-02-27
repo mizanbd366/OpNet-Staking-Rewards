@@ -5,95 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpNet Pro Staking Dashboard</title>
     <style>
+        /* আগের সব ডিজাইন স্টাইল এখানে থাকবে */
         body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; min-height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .header { width: 100%; padding: 20px; display: flex; justify-content: flex-end; position: absolute; top: 0; box-sizing: border-box; }
         .connect-btn { background-color: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .connect-btn:hover { background-color: #30363d; border-color: #58a6ff; }
-        .container { background-color: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6); width: 380px; margin-top: 60px; }
-        h1 { color: #58a6ff; font-size: 26px; margin-bottom: 5px; }
-        .tagline { font-size: 12px; color: #8b949e; margin-bottom: 25px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-box { background: #0d1117; padding: 15px; border-radius: 12px; border: 1px solid #30363d; }
-        .stat-label { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-value { font-size: 18px; font-weight: bold; color: #ffffff; }
-        .highlight { color: #3fb950; }
-        input { width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; text-align: center; font-size: 16px; }
-        .main-btn { background-color: #238636; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; margin-bottom: 10px; }
-        .withdraw-btn { background-color: transparent; border: 1px solid #f85149; color: #f85149; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.3s; }
-        .footer-note { font-size: 11px; margin-top: 20px; color: #484f58; border-top: 1px solid #30363d; padding-top: 15px; }
+        .container { background-color: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d; text-align: center; width: 380px; }
+        .main-btn { background-color: #238636; color: white; border: none; padding: 14px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <button id="walletBtn" class="connect-btn" onclick="connectOPWallet()">Connect OP-Wallet</button>
+        <button id="walletBtn" class="connect-btn" onclick="connectOPWalletOnly()">Connect OP-Wallet</button>
     </div>
 
     <div class="container">
         <h1>🌐 OpNet Staking</h1>
-        <p class="tagline">Secure DeFi Staking Protocol</p>
-
-        <div class="grid">
-            <div class="stat-box">
-                <div class="stat-label">Total Staked</div>
-                <div class="stat-value">1.2M OPN</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Annual APY</div>
-                <div class="stat-value highlight">12.5%</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Your Balance</div>
-                <div id="userBalance" class="stat-value">0.00 OPN</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Rewards Earned</div>
-                <div id="userRewards" class="stat-value highlight">0.000 OPN</div>
-            </div>
+        <p>Annual APY: <span style="color: #3fb950;">12.5%</span></p>
+        <div id="balanceBox" style="background: #0d1117; padding: 15px; border-radius: 12px; margin-bottom: 10px;">
+            <small>Your Balance</small>
+            <div id="userBalance" style="font-size: 20px; font-weight: bold;">0.00 OPN</div>
         </div>
-
-        <input type="number" id="stakeAmount" placeholder="0.00">
-        <button class="main-btn" onclick="executeStake()">Stake Tokens</button>
-        <button class="withdraw-btn" onclick="executeWithdraw()">Withdraw Everything</button>
-
-        <div class="footer-note">
-            Contract: 0xOpNet...Staking | Audit: Passed ✅
-        </div>
+        <button class="main-btn" onclick="stake()">Stake Now</button>
     </div>
 
     <script>
-        // OP-Wallet Connection Logic
-        async function connectOPWallet() {
-            if (typeof window.ethereum !== 'undefined' || typeof window.opwallet !== 'undefined') {
+        async function connectOPWalletOnly() {
+            // Phantom বা অন্য ওয়ালেটের হস্তক্ষেপ এড়ানোর জন্য সরাসরি OP_WALLET অবজেক্ট খোঁজা
+            const opProvider = window.opwallet; 
+
+            if (opProvider) {
                 try {
-                    // এটি OP-Wallet বা মেটামাস্ক এক্সটেনশন পপ-আপ করবে
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    // এটি সরাসরি OP_WALLET পপ-আপ করবে
+                    const accounts = await opProvider.requestAccounts();
                     const account = accounts[0];
                     
-                    document.getElementById('walletBtn').innerText = account.substring(0,6) + "..." + account.substring(38);
+                    document.getElementById('walletBtn').innerText = account.substring(0,6) + "..." + account.slice(-4);
                     document.getElementById('walletBtn').style.color = "#3fb950";
                     document.getElementById('userBalance').innerText = "100.00 OPN";
-                    console.log("Connected to OP-Wallet:", account);
+                    alert("Successfully connected to OP-Wallet!");
                 } catch (error) {
-                    alert("User rejected the connection.");
+                    console.error(error);
+                    alert("Connection rejected by user.");
                 }
             } else {
-                alert("OP-Wallet extension not found! Please install it from the web store.");
-                window.open("https://opnet.org", "_blank"); // OP-Wallet ডাউনলোডের জন্য লিঙ্ক
+                // যদি OP_WALLET না পাওয়া যায়
+                alert("OP-Wallet Extension not found! Please make sure OP-Wallet is installed and enabled.");
+                window.open("https://opnet.org", "_blank");
             }
         }
 
-        function executeStake() {
-            const amount = document.getElementById('stakeAmount').value;
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid amount to stake.");
-                return;
-            }
-            alert(`Confirming transaction for ${amount} OPN via OP-Wallet...`);
-        }
-
-        function executeWithdraw() {
-            alert("Withdrawing all OPN and Rewards to your OP-Wallet...");
+        function stake() {
+            alert("Confirming transaction in OP-Wallet...");
         }
     </script>
 </body>
